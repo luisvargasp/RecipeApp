@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_nav_graph"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.codechallenge.recipeapp.presentation.features.home.HomeFragment"
+        android:label="HomeFragment" >
+        <action
+            android:id="@+id/toRecipeDetail"
+            app:destination="@id/recipeDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/recipeDetailFragment"
+        android:name="com.codechallenge.recipeapp.presentation.features.detail.RecipeDetailFragment"
+        android:label="RecipeDetailFragment" >
+        <action
+            android:id="@+id/toLocationMaps"
+            app:destination="@id/mapsFragment" />
+        <argument
+            android:name="recipe"
+            app:argType="com.codechallenge.recipeapp.presentation.entities.RecipeEntity" />
+    </fragment>
+    <fragment
+        android:id="@+id/mapsFragment"
+        android:name="com.codechallenge.recipeapp.presentation.features.maps.MapsFragment"
+        android:label="MapsFragment" />
+</navigation>

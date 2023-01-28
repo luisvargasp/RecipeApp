@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="viewModel"
+            type="com.codechallenge.recipeapp.presentation.features.home.HomeViewModel" />
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+        <androidx.appcompat.widget.SearchView
+            android:layout_marginTop="8dp"
+            android:id="@+id/svRecipe"
+            android:visibility="gone"
+            tools:visibility="visible"
+            setVisibility="@{!viewModel.isLoading &amp;&amp; viewModel.listSuccessFullyLoaded}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="#E1DDDD"
+            app:iconifiedByDefault="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:queryHint="@string/search_recipe_hint" />
+
+        <androidx.recyclerview.widget.RecyclerView
+
+            android:visibility="gone"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            setVisibility="@{!viewModel.isLoading &amp;&amp; viewModel.listSuccessFullyLoaded}"
+            android:id="@+id/rvRecipe"
+            android:orientation="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:visibility="visible"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/svRecipe" />
+
+        <TextView
+            android:id="@+id/tvNoRecipesFound"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/recipes_not_found"
+            android:visibility="gone"
+            android:gravity="center"
+            tools:visibility="visible"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            setVisibility="@{viewModel.showNoRecipesFoundInSearch}"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/svRecipe"/>
+        <ProgressBar
+            android:id="@+id/pbLoading"
+            setVisibility="@{viewModel.isLoading()}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:gravity="center"
+            tools:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/svRecipe" />
+        <ImageButton
+            android:src="@drawable/ic_reload"
+            android:onClick="@{()->viewModel.retrieveTopRecipes()}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            setVisibility="@{viewModel.showErrorState}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/svRecipe" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
