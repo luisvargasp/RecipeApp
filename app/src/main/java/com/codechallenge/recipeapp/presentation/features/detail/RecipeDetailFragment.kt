@@ -5,13 +5,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.codechallenge.recipeapp.databinding.FragmentRecipeDetailBinding
 
 
 class RecipeDetailFragment : Fragment() {
 
-    val args: RecipeDetailFragmentArgs by navArgs()
+    private val args: RecipeDetailFragmentArgs by navArgs()
 
 
     private lateinit var binding: FragmentRecipeDetailBinding
@@ -27,6 +28,10 @@ class RecipeDetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner=this
         binding.recipe=args.recipe
+        binding.ibLocation.setOnClickListener{
+            findNavController().navigate(RecipeDetailFragmentDirections.toLocationMaps(args.recipe.originLocation))
+        }
+
 
     }
 }

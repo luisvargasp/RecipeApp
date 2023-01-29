@@ -26,5 +26,9 @@
     <fragment
         android:id="@+id/mapsFragment"
         android:name="com.codechallenge.recipeapp.presentation.features.maps.MapsFragment"
-        android:label="MapsFragment" />
+        android:label="MapsFragment" >
+        <argument
+            android:name="location"
+            app:argType="com.codechallenge.recipeapp.presentation.entities.RecipeEntity$LocationEntity" />
+    </fragment>
 </navigation>
