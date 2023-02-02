@@ -17,7 +17,10 @@ fun ImageView.loadImage(imageUrl:String){
 
 @BindingAdapter("setTextFromList")
 fun TextView.setTextFromList(list:List<String>){
-    this.text=list.joinToString( separator = "\n"){
+    this.text=list.getTextFromList()
+}
+fun List<String>.getTextFromList():String{
+    return this.joinToString( separator = "\n"){
         "-$it"
     }
 }

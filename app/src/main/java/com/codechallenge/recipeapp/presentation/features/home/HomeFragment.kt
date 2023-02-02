@@ -11,15 +11,16 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.codechallenge.recipeapp.databinding.FragmentHomeBinding
 import com.codechallenge.recipeapp.presentation.base.BaseFragment
+import com.codechallenge.recipeapp.presentation.bindingadapters.setVisibility
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class HomeFragment : BaseFragment() {
-    private lateinit var binding: FragmentHomeBinding
-    private lateinit var adapter: RecipeAdapter
+class HomeFragment(val homeViewModel: HomeViewModel?=null) : BaseFragment() {
+     lateinit var binding: FragmentHomeBinding
+     lateinit var adapter: RecipeAdapter
     lateinit var viewModel : HomeViewModel
 
     override fun onCreateView(
@@ -32,7 +33,7 @@ class HomeFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(requireActivity())[HomeViewModel::class.java]
+        viewModel = homeViewModel ?: ViewModelProvider(requireActivity())[HomeViewModel::class.java]
         binding.viewModel=viewModel
         binding.lifecycleOwner=this
         setupAdapter()
@@ -44,6 +45,7 @@ class HomeFragment : BaseFragment() {
         viewModel.recipesToShow.observe(viewLifecycleOwner
         ){
             it?.let {list->
+                binding.rvRecipe.setVisibility(true)
                 adapter.recipes=list
             }
 
@@ -60,6 +62,7 @@ class HomeFragment : BaseFragment() {
     private fun setupAdapter(){
         adapter= RecipeAdapter()
         adapter.setOnItemClickListener {
+            viewModel.setSelectedRecipe(it)
             findNavController().navigate(HomeFragmentDirections.toRecipeDetail(it))
         }
         binding.rvRecipe.adapter=adapter
@@ -77,7 +80,7 @@ class HomeFragment : BaseFragment() {
                 job = lifecycleScope.launch {
                     delay(500)
                     newText.let {
-                            viewModel.searchRecipe(it.lowercase())
+                            viewModel.searchRecipe2(it.lowercase())
                     }
                 }
 

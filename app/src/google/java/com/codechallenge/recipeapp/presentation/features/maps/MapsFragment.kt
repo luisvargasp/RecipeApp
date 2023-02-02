@@ -14,6 +14,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.CameraPosition.*
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 
 // TODO: Rename parameter arguments, choose names that match
@@ -22,6 +23,8 @@ class MapsFragment : Fragment() , OnMapReadyCallback {
     private lateinit var binding: FragmentMapsBinding
     val args: MapsFragmentArgs by navArgs()
     private lateinit var map: GoogleMap
+     var marker:Marker?=null
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,9 +56,9 @@ class MapsFragment : Fragment() , OnMapReadyCallback {
             isCompassEnabled = false
         }
         val latLng= LatLng(args.location.latitude,args.location.longitude)
-        map.addMarker(
+        marker=map.addMarker(
             MarkerOptions().position(latLng).title(args.location.name)
-        )
+        )!!
         map.animateCamera(CameraUpdateFactory.newCameraPosition(
             Builder()
                 .target(latLng)

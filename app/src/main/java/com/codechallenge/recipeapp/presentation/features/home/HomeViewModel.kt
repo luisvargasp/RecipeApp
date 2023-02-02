@@ -15,7 +15,14 @@ import kotlinx.coroutines.withContext
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(val useCase: GetTopRecipesUseCase):ViewModel() {
-
+    val isRunningTest : Boolean by lazy {
+        try {
+            Class.forName("androidx.test.espresso.Espresso")
+            true
+        } catch (e: ClassNotFoundException) {
+            false
+        }
+    }
     private val _topRecipes = MutableLiveData<List<RecipeEntity>>()
     val topRecipes: LiveData<List<RecipeEntity>> get() = _topRecipes
 
@@ -26,14 +33,18 @@ class HomeViewModel @Inject constructor(val useCase: GetTopRecipesUseCase):ViewM
     val listSuccessFullyLoaded= MutableLiveData(false)
     val showNoRecipesFoundInSearch=MutableLiveData(false)
     val showErrorState=MutableLiveData(false)
-    val errorException = MutableLiveData<Exception>()
+    val errorException = MutableLiveData<Exception?>()
+    val selectedRecipe = MutableLiveData<RecipeEntity?>()
 
 
     init {
-        retrieveTopRecipes()
+        if(true){
+            retrieveTopRecipes()
+        }
 
     }
-    fun retrieveTopRecipes(){
+
+     fun retrieveTopRecipes(){
        isLoading.value=true
        listSuccessFullyLoaded.value=false
        showErrorState.value=false
@@ -73,6 +84,24 @@ class HomeViewModel @Inject constructor(val useCase: GetTopRecipesUseCase):ViewM
             _recipesToShow.value=filteredList!!
             showNoRecipesFoundInSearch.value=filteredList.isEmpty()
         }
+
+    }
+    fun searchRecipe2(query: String) {
+       if(shouldFiltrate(query)){
+           val filteredList=_topRecipes.value?.filter { recipe -> recipe.name.lowercase().contains(query.lowercase()) || recipe.ingredients.any{it.lowercase().contains(query.lowercase())} }
+           _recipesToShow.value=filteredList!!
+           showNoRecipesFoundInSearch.value=filteredList.isEmpty()
+       }
+
+    }
+    fun setSelectedRecipe(recipe: RecipeEntity) {
+        selectedRecipe.value=recipe
+    }
+
+    fun shouldFiltrate(query:String):Boolean{
+        return if(query.length>=3){
+            true
+        } else query.isEmpty()&&_recipesToShow.value != _topRecipes.value
 
     }
 
